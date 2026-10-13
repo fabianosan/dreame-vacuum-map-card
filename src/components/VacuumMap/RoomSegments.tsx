@@ -1,6 +1,7 @@
 import { useMemo, memo, useRef } from 'react';
 import type { Room } from '@/types/homeassistant';
-import { useMachineState } from '@/contexts';
+import { useEntity, useMachineState } from '@/contexts';
+import { isRobotBusy } from '@/constants';
 import { createRoomPath } from '@/utils/roomParser';
 import type { MapTransform } from '@/utils/mapTransform';
 import { logger } from '@/utils/logger';
@@ -100,7 +101,8 @@ function RoomSegmentsInner({
   imageHeight,
 }: RoomSegmentsProps) {
   const { phase } = useMachineState();
-  const isBusy = phase !== 'idle';
+  const entity = useEntity();
+  const isBusy = isRobotBusy(phase, entity.state);
   logger.debug('RoomSegments', 'Render, selectedRooms:', Array.from(selectedRooms.keys()));
 
   const roomPaths = useMemo(() => {

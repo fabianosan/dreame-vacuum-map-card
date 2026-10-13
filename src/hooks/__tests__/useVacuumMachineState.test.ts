@@ -24,13 +24,18 @@ describe('isRobotBusy', () => {
     expect(isRobotBusy('cleaning', 'cleaning')).toBe(true);
     expect(isRobotBusy('paused', 'paused')).toBe(true);
     expect(isRobotBusy('returning', 'returning')).toBe(true);
-    expect(isRobotBusy('maintenance', 'cleaning')).toBe(true);
     expect(isRobotBusy('idle', 'cleaning')).toBe(true);
+    expect(isRobotBusy('other', 'cleaning')).toBe(true);
+    expect(isRobotBusy('maintenance', 'cleaning')).toBe(true);
   });
 
   it('allows room selection when the robot is idle', () => {
     expect(isRobotBusy('idle', 'docked')).toBe(false);
     expect(isRobotBusy('idle', 'idle')).toBe(false);
+  });
+
+  it.each(['maintenance', 'other', 'error'] as const)('allows room selection at the dock during %s', (phase) => {
+    expect(isRobotBusy(phase, 'docked')).toBe(false);
   });
 });
 

@@ -119,8 +119,12 @@ export const DEFAULT_PHASE: VacuumPhase = 'idle';
 
 const ACTIVE_VACUUM_STATES = new Set(['cleaning', 'paused', 'returning']);
 
+/**
+ * Whether the robot is in a cleaning session or heading home, so rooms cannot be (re)selected.
+ * Dock maintenance and other idle-like states do not count: the robot can accept a new task.
+ */
 export function isRobotBusy(phase: VacuumPhase, vacuumState: string | undefined): boolean {
-  if (phase !== 'idle') return true;
+  if (phase === 'cleaning' || phase === 'paused' || phase === 'returning') return true;
   return ACTIVE_VACUUM_STATES.has(vacuumState ?? '');
 }
 
