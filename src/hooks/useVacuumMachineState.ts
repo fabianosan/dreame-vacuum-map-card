@@ -55,16 +55,17 @@ export interface VacuumMachineState {
 }
 
 /**
- * Derive phase from sensor state, with fallback to vacuum entity state
+ * Derive phase from sensor state, with fallback to vacuum entity state.
+ * An "other" sensor state (e.g. shortcut) says nothing about whether a task is running,
+ * so an active vacuum entity state (cleaning / paused / returning) takes precedence over it.
  */
 export function derivePhase(sensorState: string | undefined, vacuumState: string | undefined): VacuumPhase {
-  if (sensorState && STATE_TO_PHASE[sensorState]) {
-    return STATE_TO_PHASE[sensorState];
-  }
-  if (vacuumState && VACUUM_STATE_TO_PHASE[vacuumState]) {
-    return VACUUM_STATE_TO_PHASE[vacuumState];
-  }
-  return DEFAULT_PHASE;
+  const sensorPhase = sensorState ? STATE_TO_PHASE[sensorState] : undefined;
+  const vacuumPhase = vacuumState ? VACUUM_STATE_TO_PHASE[vacuumState] : undefined;
+
+  if (sensorPhase && sensorPhase !== 'other') return sensorPhase;
+  if (vacuumPhase === 'cleaning' || vacuumPhase === 'paused' || vacuumPhase === 'returning') return vacuumPhase;
+  return sensorPhase ?? vacuumPhase ?? DEFAULT_PHASE;
 }
 
 /**

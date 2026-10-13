@@ -14,6 +14,23 @@ describe('derivePhase', () => {
     expect(derivePhase('unknown', vacuumState)).toBe(phase);
   });
 
+  it.each([
+    ['cleaning', 'cleaning'],
+    ['paused', 'paused'],
+    ['returning', 'returning'],
+  ] as const)('lets an active vacuum state %s override an "other" sensor state', (vacuumState, phase) => {
+    expect(derivePhase('shortcut', vacuumState)).toBe(phase);
+  });
+
+  it.each(['docked', 'idle'])('keeps "other" for a shortcut sensor state while the vacuum is %s', (vacuumState) => {
+    expect(derivePhase('shortcut', vacuumState)).toBe('other');
+  });
+
+  it('does not let the vacuum state override a mapped non-other sensor state', () => {
+    expect(derivePhase('washing', 'cleaning')).toBe('maintenance');
+    expect(derivePhase('charging', 'cleaning')).toBe('idle');
+  });
+
   it('falls back to the vacuum state while the sensor is unavailable', () => {
     expect(derivePhase('unavailable', 'returning')).toBe('returning');
   });
