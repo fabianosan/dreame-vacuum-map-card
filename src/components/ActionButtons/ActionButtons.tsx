@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { AreaSelectionMode, CleaningSelectionMode, StopAction } from '@/types/homeassistant';
 import { useTranslation, useButtonConfig } from '@/hooks';
-import { useMachineState } from '@/contexts';
+import { useEntity, useMachineState } from '@/contexts';
 import { DockPopup } from '@/components/DockPopup';
 import { shouldOpenDockPopup } from '@/utils/dockPopup';
 import { CleanButton, PauseButton, ResumeButton, StopButton, DockButton } from './components';
@@ -31,11 +31,12 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   const { t, getRoomCountTranslation } = useTranslation();
   const { getStopAction } = useButtonConfig();
+  const entity = useEntity();
   const { phase, controls } = useMachineState();
   const [dockPopupOpened, setDockPopupOpened] = useState(false);
 
   const stopAction = getStopAction();
-  const opensDockPopup = shouldOpenDockPopup(phase);
+  const opensDockPopup = shouldOpenDockPopup(phase, entity.state);
 
   const getCleanButtonText = (): string => {
     switch (selectedMode) {
