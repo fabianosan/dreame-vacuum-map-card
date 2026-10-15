@@ -1,0 +1,154 @@
+name: Bug report
+description: Something on the card is wrong (map not loading, rooms, buttons, dialogs, styling)
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. This card works on top of the [Tasshack Dreame Vacuum integration](https://github.com/Tasshack/dreame-vacuum).
+        Problems with the device, its connection or missing entities belong in the integration repository.
+        The more of the fields below you fill in, the faster the problem can be found. Please remove tokens and personal data.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I use the latest release of this card and the latest Dreame Vacuum integration.
+          required: true
+        - label: I restarted Home Assistant and hard refreshed the browser (cleared cache) after updating.
+          required: true
+        - label: I searched open and closed issues and found no duplicate.
+          required: true
+        - label: The Tasshack integration's own entities work in Home Assistant (vacuum entity and map camera exist).
+          required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What is wrong?
+      description: Describe what you expected and what happens instead. Add the exact text of any error shown on the card.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the dashboard
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: card-version
+    attributes:
+      label: Card version
+      description: Shown in HACS, or in the browser console when the card loads.
+      placeholder: e.g. 1.6.2
+    validations:
+      required: true
+  - type: input
+    id: integration-version
+    attributes:
+      label: Dreame Vacuum integration version
+      placeholder: e.g. 2.0.0b20
+    validations:
+      required: true
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home Assistant version
+      placeholder: e.g. 2025.10.2
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Vacuum model
+      description: Model name and model number if known.
+      placeholder: e.g. Dreame D9 Max, dreame.vacuum.p2259
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where do you see the problem?
+      options:
+        - Home Assistant web in a desktop browser
+        - Home Assistant web in a mobile browser
+        - Home Assistant Companion app (Android)
+        - Home Assistant Companion app (iOS)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser / app and version
+      placeholder: e.g. Chrome 130, Safari 18, Companion app 2025.10
+  - type: textarea
+    id: config
+    attributes:
+      label: Card configuration (YAML)
+      description: Paste the full card YAML. Set `map_entity` only if you did so on purpose, and say so.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: map-camera
+    attributes:
+      label: Map camera state (for map, room or overlay problems)
+      description: |
+        In Developer Tools > States, open your map camera (usually `camera.<name>_map`) and paste its state and attributes.
+        Include `entity_picture`, `map_id`, `saved_map_id`, `rooms` and `calibration_points`. Remove the `token=...` part of `entity_picture`.
+      render: yaml
+  - type: textarea
+    id: vacuum-state
+    attributes:
+      label: Vacuum entity state (for control or status problems)
+      description: In Developer Tools > States, paste the state and attributes of your vacuum entity.
+      render: yaml
+  - type: markdown
+    attributes:
+      value: |
+        ### HAR file (for "map image failed to load" and other loading problems)
+        A HAR file records the browser's network requests and avoids copy and paste mistakes.
+        1. Open the dashboard with the card, press **F12** and go to the **Network** tab.
+        2. Tick **Preserve log** and **Disable cache**.
+        3. Reload the page (Ctrl+Shift+R) and reproduce the problem.
+        4. In the **Filter** box type `camera` so only the camera requests remain (or leave it empty for everything).
+        5. Export: right-click the list > **Save all as HAR with content** (Chrome, Edge) or click the download arrow. In Firefox use the gear icon > **Save All As HAR**. In Safari use **Export** in the Network tab.
+        6. GitHub does not accept `.har` files. Put the file in a **.zip** (or rename it to `.har.txt`) and drag it into the field below.
+
+        **A HAR can contain access tokens, cookies and `Authorization` headers.** Use the Chrome / Edge default export (it removes sensitive values), do not tick "Allow to generate HAR with sensitive data", and open the file in a text editor to remove anything private before uploading.
+        If you cannot export a HAR, paste the status code and Content-Type of the `/api/camera_proxy/` request instead.
+  - type: textarea
+    id: har
+    attributes:
+      label: HAR file (zipped) or request details
+      description: Drag the zipped HAR here, or paste the status code, Content-Type and response of the failing request.
+  - type: textarea
+    id: console
+    attributes:
+      label: Browser console output
+      description: |
+        Open DevTools > Console, reload, and paste red errors and warnings. For more detail run `dreameVacuum.enableDebug()` in the console, reload and reproduce.
+      render: text
+  - type: textarea
+    id: ha-logs
+    attributes:
+      label: Home Assistant log
+      description: |
+        Settings > System > Logs. Paste only lines mentioning `dreame_vacuum` (for example `Map render Failed`) around the time of the problem.
+        Do not upload the full log, it can contain tokens and personal data.
+      render: text
+  - type: textarea
+    id: tasshack
+    attributes:
+      label: Does the Tasshack card show the same thing?
+      description: If you can, say whether the Tasshack card works at the same time and how, plus its network requests for the map.
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or screen recording
+      description: A full screenshot of the dashboard showing the problem is very helpful. Drag files here.
+    validations:
+      required: true

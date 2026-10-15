@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Integration problem (device, connection, missing entities)
+    url: https://github.com/Tasshack/dreame-vacuum/issues
+    about: Problems with the Dreame Vacuum integration itself belong in the Tasshack integration repository.

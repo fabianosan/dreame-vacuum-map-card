@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an improvement for the card
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe how it should work. Mockups are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: integration
+    attributes:
+      label: Needed entities or attributes
+      description: If it depends on data from the integration, name the entities or attributes it would use.
+  - type: input
+    id: model
+    attributes:
+      label: Vacuum model
+      placeholder: e.g. Dreame D9 Max
