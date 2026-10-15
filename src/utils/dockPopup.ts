@@ -39,8 +39,12 @@ const GOOD_STATUS_VALUES = [
   'high',
 ];
 
-export function shouldOpenDockPopup(phase: VacuumPhase): boolean {
-  return phase !== 'cleaning' && phase !== 'paused';
+/**
+ * The dock popup is only useful when the robot is actually at the dock. Otherwise the
+ * Dock button must send it home (e.g. when it is stopped away from the dock).
+ */
+export function shouldOpenDockPopup(phase: VacuumPhase, vacuumState: string | undefined): boolean {
+  return vacuumState === 'docked' && phase !== 'cleaning' && phase !== 'paused';
 }
 
 export function classifyDockStatus(value: unknown, warnWhenLow = false): DockStatusLevel {
